@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo:*)",
+      "Bash(terraform version:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(terraform init:*)",
+      "Bash(az version:*)",
+      "Bash(az account show:*)",
+      "Bash(az account set:*)",
+      "Bash(az resource list:*)",
+      "Bash(aztfexport version:*)",
+      "Bash(mkdir:*)"
+    ]
+  },
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
+    "terraform": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server"
+      ]
+    }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'input=$(cat); file=$(echo \"$input\" | jq -r \".tool_input.file_path // empty\"); [[ \"$file\" == *.tf ]] && terraform fmt \"$file\" || true'"
+          }
+        ]
+      }
+    ]
+  }
+}
