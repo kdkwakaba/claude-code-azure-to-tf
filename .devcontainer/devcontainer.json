@@ -4,15 +4,14 @@
     "dockerfile": "Dockerfile",
     "context": ".."
   },
-  "initializeCommand": ["powershell", "-NoProfile", "-Command", "New-Item -ItemType Directory -Force \"$env:USERPROFILE\\.claude\" | Out-Null; if (-not (Test-Path \"$env:USERPROFILE\\.claude.json\")) { Set-Content -Path \"$env:USERPROFILE\\.claude.json\" -Value '{}' }; if (-not (Test-Path \"$env:USERPROFILE\\.claude\\.credentials.json\")) { Set-Content -Path \"$env:USERPROFILE\\.claude\\.credentials.json\" -Value '{}' }"],
+  "initializeCommand": ["powershell", "-NoProfile", "-Command", "if (-not (Test-Path \"$env:USERPROFILE\\.claude.json\")) { Set-Content -Path \"$env:USERPROFILE\\.claude.json\" -Value '{}' }"],
+  "mounts": [
+    "source=${localEnv:USERPROFILE}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached",
+  ],
   "remoteUser": "vscode",
   "features": {
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
   },
-  "mounts": [
-    "source=${localEnv:USERPROFILE}/.claude,target=/home/vscode/.claude,type=bind,consistency=cached",
-    "source=${localEnv:USERPROFILE}/.claude.json,target=/home/vscode/.claude.json,type=bind,consistency=cached"
-  ],
   "runArgs": [
     "--env-file",
     "${localWorkspaceFolder}/.env"
@@ -20,7 +19,7 @@
   "remoteEnv": {
     "PATH": "/home/vscode/.local/bin:${containerEnv:PATH}"
   },
-  "postCreateCommand": "bash -lc 'claude --version && az version && terraform version'",
+  "postCreateCommand": "bash -lc 'claude --version && az version && terraform version && echo \"export TF_PLUGIN_CACHE_DIR=\\\"\\$HOME/.terraform.d/plugin-cache\\\"\" >> ~/.bashrc && mkdir -p \"$HOME/.terraform.d/plugin-cache\"'",
   "postStartCommand": "bash -lc 'if [ -n \"$ARM_CLIENT_ID\" ] && [ -n \"$ARM_CLIENT_SECRET\" ] && [ -n \"$ARM_TENANT_ID\" ]; then az login --service-principal -u \"$ARM_CLIENT_ID\" -p \"$ARM_CLIENT_SECRET\" --tenant \"$ARM_TENANT_ID\" && az account set --subscription \"$ARM_SUBSCRIPTION_ID\" && echo \"Azure login successful.\"; else echo \"[SKIP] .env not found or incomplete. Run: cp .env.example .env and fill in credentials.\"; fi'",
   "customizations": {
     "vscode": {

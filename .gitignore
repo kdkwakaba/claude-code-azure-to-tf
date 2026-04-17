@@ -7,3 +7,4 @@
 **/*.tfstate.backup
 **/.terraform.lock.hcl
 **/*.tfplan
+**/*.secret.tfvars
