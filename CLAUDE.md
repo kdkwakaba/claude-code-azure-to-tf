@@ -27,32 +27,7 @@ terraform apply
 
 ## プロジェクト構成
 
-コンポーネントごとに独立した Terraform ルートモジュールを `infra/` 配下に配置する:
-
-```
-my-azure-app/
-├── doc/                        # ドキュメント（アーキテクチャ・デプロイ・セキュリティ）
-├── infra/                      # コンポーネントごとの Terraform ルートモジュール
-│   ├── front/                  # フロントエンド関連リソース
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │   ├── terraform.tf
-│   │   └── locals.tf
-│   ├── backend/                # バックエンド関連リソース
-│   │   └── ...
-│   ├── api/                    # API 関連リソース
-│   │   └── ...
-│   ├── database/               # データベース関連リソース
-│   │   └── ...
-│   └── environments/
-│       └── production.tfvars   # 既存リソースの環境に対応するファイルのみ作成
-├── .github/workflows/          # CI/CD (GitHub Actions)
-├── .azdo/                      # CI/CD (Azure DevOps)
-└── README.md
-```
-
-環境の差異は `.tfvars` で管理する。ブランチ・リポジトリ・フォルダーを環境ごとに分けない。
+コンポーネントごとに独立した Terraform ルートモジュールを `infra/` 配下に配置する。環境の差異は `.tfvars` で管理する。ブランチ・リポジトリ・フォルダーを環境ごとに分けない。
 
 ## 追加ルール
 

@@ -67,10 +67,7 @@ locals {
 
 1. **`azurerm` プロバイダーを優先して使用する**：対応するリソースタイプが存在する場合は常に `azurerm` を使用する
 2. **`azapi` プロバイダーはフォールバックとして使用する**：`azurerm` に対応するリソースタイプが存在しない場合のみ `azapi_resource` を使用し、その旨をコメントで明示する
-3. **AVM（Azure Verified Modules）は使用しない**：既存リソースのインポート時に以下の問題が発生するため使用しない
-   - AVM モジュールのデフォルト値（`zone_balancing_enabled = true`・`worker_count = 3` など）が既存リソースの設定と異なり、意図しない設定変更が生じる
-   - AVM モジュールが内部で追加リソース（`modtm_telemetry`・`random_uuid`・`time_sleep` など）を自動生成し、意図しないリソース作成が発生する
-   - モジュールの出力が `sensitive = true` になっている場合、import 後の outputs.tf で連鎖的に `sensitive = true` が必要となりコードが複雑化する
+3. **AVM（Azure Verified Modules）は使用しない**（既存リソースの import 時に意図しない設定変更・リソース追加生成が発生するため）
 
 ## フォーマット
 
