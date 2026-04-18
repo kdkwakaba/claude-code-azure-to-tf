@@ -1,5 +1,7 @@
 # claude-code-azure-to-tf
 
+※このリポジトリは現在開発中のリソースとなります
+
 Claude Code を使って Azure インフラ向けの Terraform コードを生成・管理するためのプロンプト・指示セットです。
 
 ## 概要
