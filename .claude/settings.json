@@ -1,0 +1,97 @@
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
+    "terraform": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "hashicorp/terraform-mcp-server"
+      ]
+    }
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Bash(aztfexport *)",
+      "Bash(aztfexport:*)",
+      "Bash(az login *)",
+      "Bash(az account *)",
+      "Bash(az resource list *)",
+      "Bash(az storage *)",
+      "Bash(az version)",
+      "Bash(terraform *)",
+      "Bash(terraform version)",
+      "Bash(terraform validate)",
+      "Bash(terraform validate *)",
+      "Bash(terraform fmt *)",
+      "Bash(terraform init -backend=false)",
+      "Bash(terraform init -backend=false *)",
+      "Bash(mktemp *)",
+      "Bash(mktemp -d *)",
+      "Bash(chmod *)",
+      "Bash(chmod 700 *)",
+      "Bash(mkdir:*)",
+      "Bash(mkdir *)",
+      "Bash(mkdir -p *)",
+      "Bash(ls *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -rf /tmp/aztfexport-*)",
+      "Bash(curl *)",
+      "Bash(curl -s --max-time 5 https://registry.terraform.io*)",
+      "Bash(export *)",
+      "Bash(unset *)",
+      "Bash(printenv *)",
+      "Bash([ -n *)",
+      "Bash([ -z *)",
+      "Bash(for *)",
+      "Bash(if *)",
+      "Bash(cat > *)",
+      "Bash(cp *)",
+      "Bash(cp -r *)",
+      "Bash(WORK_DIR=*)",
+      "Bash(EXCLUDE_FILE=*)",
+      "Bash(SUMMARY_FILE=*)",
+      "Bash(AZURERM_VERSION=*)",
+      "Bash(AZAPI_VERSION=*)",
+      "Bash(RG_DIR=*)",
+      "Bash(grep -rhE *)",
+      "Bash(grep -A *)",
+      "Bash(sed *)",
+      "Bash(rm -rf /workspaces/claude-code-azure-terraform/.aztfexport-*)",
+      "Write(/tmp/**)",
+      "Write(/infra/**)",
+      "Write(/workspaces/claude-code-azure-terraform/.aztfexport-*/**)",
+      "Write(/workspaces/claude-code-azure-terraform/infra/**)",
+      "Write(/workspaces/claude-code-azure-terraform/.gitignore)",
+      "Write(/home/vscode/.terraformrc)",
+      "Write(/home/vscode/.terraform.d/**)",
+      "Read(/tmp/aztfexport-*/**)"
+    ],
+    "ask": [
+      "Bash(terraform plan)",
+      "Bash(terraform plan *)",
+      "Bash(terraform apply)",
+      "Bash(terraform apply *)",
+      "Bash(terraform destroy)",
+      "Bash(terraform destroy *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'input=$(cat); file=$(echo \"$input\" | jq -r \".tool_input.file_path // empty\"); [[ \"$file\" == *.tf ]] && terraform fmt \"$file\" || true'"
+          }
+        ]
+      }
+    ]
+  }
+}
